@@ -18,7 +18,7 @@ resource "google_compute_subnetwork" "subnetwork" {
   project         = var.project_id
   region          = var.location
   ip_cidr_range   = var.subnet_ip_cidr_range
-  network         = google_compute_network.default.id
+  network         = google_compute_network.network.id
   purpose         = "PRIVATE"
   role            = "ACTIVE"
   stack_type      = "IPV4_ONLY"
