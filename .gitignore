@@ -31,6 +31,9 @@ Session.vim
 *.tfstate
 *.tfstate.*
 
+# lock.hcl
+.terraform.lock.hcl
+
 # Crash log files
 crash.log
 
@@ -64,5 +67,4 @@ credentials.json
 go.sum
 
 # personal assets
-credentials
 personal_assets

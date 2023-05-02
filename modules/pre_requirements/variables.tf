@@ -22,7 +22,17 @@ variable "network" {
 }
 
 variable "proxyonlysubnet_ip_cidr_range" {
-  description = "The ip cidr range used by the regional manged proxy subenet."
+  description = "The ip cidr range used by the regional manged proxy subnet."
   type        = string
   default     = "192.168.0.0/23"
+}
+
+variable "gateway_pem_certificate_file_path" {
+  description = "The gateway pem certificate file path to be used by the certificate manager."
+  type        = string
+}
+
+variable "gateway_pem_private_key_file_path" {
+  description = "The gateway pem private key file path to be used by the certificate manager."
+  type        = string
 }

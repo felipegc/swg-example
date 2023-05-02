@@ -11,8 +11,8 @@ resource "google_certificate_manager_certificate" "certificate" {
   description = "Necessary certificate for swg gateway usage"
   scope       = "DEFAULT"
   self_managed {
-    pem_certificate = file("./ssl-keys/cert.pem")
-    pem_private_key = file("./ssl-keys/key.pem")
+    pem_certificate = file(var.gateway_pem_certificate_file_path)
+    pem_private_key = file(var.gateway_pem_private_key_file_path)
   }
 }
 

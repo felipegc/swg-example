@@ -9,6 +9,16 @@ variable "location" {
   default     = "us-central1"
 }
 
+variable "gateway_pem_certificate_file_path" {
+  description = "The gateway pem certificate file path to be used by the certificate manager."
+  type        = string
+}
+
+variable "gateway_pem_private_key_file_path" {
+  description = "The gateway pem private key file path to be used by the certificate manager."
+  type        = string
+}
+
 variable "proxyonlysubnet_ip_cidr_range" {
   description = "The ip cidr range used by the regional manged proxy subenet."
   type        = string
@@ -23,4 +33,15 @@ variable "network" {
 variable "subnetwork" {
   description = "The subnetwork where the secure web gateway belongs to."
   type        = string
+}
+
+variable "session_matcher_rule" {
+  description = "The session matcher policy rule in CEL format."
+  type        = string
+}
+
+variable "gateway_address" {
+  description = "The gateway addess."
+  type        = string
+  default     = "10.128.0.99"
 }
