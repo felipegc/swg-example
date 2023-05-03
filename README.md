@@ -30,7 +30,7 @@ A user account that contains the following roles at project level:
 
 A valid SSL certificate to be uploaded to the certificate manager. 
 
-__Note:__ You may want to generate a self signed certificate for test purpose:
+__Note:__ You may want to generate a self signed certificate for test purpose. For further information you may access [here](https://cloud.google.com/load-balancing/docs/ssl-certificates/self-managed-certs#use_a_self-signed_certificate)
 
 ```bash
 export KEY_PATH="<the path to save the key, such as `./selfsignedkeys/key.pem`>"
@@ -50,6 +50,11 @@ openssl req -x509 -newkey rsa:2048 \
 
 You will find different examples under the `examples` folder in this directory.
 Inside of each folder there is a file called `terraform.example.tfvars.json`. These files contain all necessary parameters to run the examples easily.
+
+Currently there are 2 examples:
+
+- basic_swg: provision the secure web gateways resource to a existent VPC network.
+- network_swg: provision a VPC network and the secure web gateways resources inside the VPC network.
 
 ### From one of the examples
 
@@ -71,19 +76,19 @@ Inside of each folder there is a file called `terraform.example.tfvars.json`. Th
     cp terraform.example.tfvars.json terraform.tfvars.json
     ```
 
-1. Run `terraform plan` and review the plan
+1. Run `terraform plan` and review the plan.
 
     ```bash
     terraform plan
     ```
 
-1. Run `terraform apply`
+1. Run `terraform apply`.
 
     ```bash
     terraform apply
     ```
 
-1. Run `terraform destroy` in order to delete all secure web gateway related resources
+1. Run `terraform destroy` in order to delete all secure web gateway related resources when you are good with your tests.
 
     ```bash
     terraform destroy
@@ -99,10 +104,12 @@ You may want to test if all resources are successfully working as expected by pe
     export SUBNETWORK_NAME="<the chosen subnetwork where the resources were created `default`>"
     export ZONE="<a zone for the region where the swg esources were created such as `us-central1-a`>"
     export VM_INSTANCE_NAME="<vm instance name whetever you like such as `swg-test-vm`>"
+    export PROJECT_ID="<project_id where the resources were created>"
     ```
 
     ```bash
     gcloud compute instances create ${VM_INSTANCE_NAME} \
+    --project=${PROJECT_ID} \
     --subnet=${SUBNETWORK_NAME} \
     --zone=${ZONE} \
     --image-project=debian-cloud \
@@ -122,7 +129,6 @@ You may want to test if all resources are successfully working as expected by pe
     ```bash
     export NETWORK_NAME="<the chosen network where the resources were created such as `default`>"
     export DEST_RANGES="<the chosen `subnet_ip_cidr_range` usend in `terraform.tfvars.json` such as `10.128.0.0/20`"
-    export PROJECT_ID="<project_id where the resources were created>"
     ```
 
     ```bash
@@ -138,4 +144,10 @@ You may want to test if all resources are successfully working as expected by pe
 
     ```bash
     curl -x https://${GATEWAY_ADDRESS}:443 https://${TARGET_HOST}
+    ```
+
+    __Note:__ If you are using a self signed certificate, the `curl` cmd may complains about it. To solve that you should choose `http` vs `https` for proxy tunnel.
+
+    ```bash
+    curl -x http://${GATEWAY_ADDRESS}:443 https://${TARGET_HOST}
     ```
