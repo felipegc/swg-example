@@ -43,7 +43,7 @@ openssl req -x509 -newkey rsa:2048 \
   -keyout ${KEY_PATH} \
   -out ${CERTIFICATE_PATH} -days 365 \
   -subj '/CN=${SWP_HOST_NAME}' -nodes -addext \
-  "subjectAltName=DNS:{SWP_HOST_NAME}"
+  "subjectAltName=DNS:${SWP_HOST_NAME}"
 ```
 
 ## Usage
@@ -83,7 +83,7 @@ Inside of each folder there is a file called `terraform.example.tfvars.json`. Th
     terraform apply
     ```
 
-1. Run `terraform detroy` in order to deleted all secure web gateway related resources
+1. Run `terraform destroy` in order to delete all secure web gateway related resources
 
     ```bash
     terraform destroy
@@ -91,7 +91,7 @@ Inside of each folder there is a file called `terraform.example.tfvars.json`. Th
 
 ### Tests
 
-You may want to test all resource are successfully working as expected by performing a request through the created `secure web gateway` you just created.
+You may want to test if all resources are successfully working as expected by performing a request through the created `secure web gateway`.
 
 1. Create a vm instance under the same subnetwork where the gateway resources were created. You may create by using `gcloud` CLI tool:
    
@@ -99,20 +99,18 @@ You may want to test all resource are successfully working as expected by perfor
     export SUBNETWORK_NAME="<the chosen subnetwork where the resources were created `default`>"
     export ZONE="<a zone for the region where the swg esources were created such as `us-central1-a`>"
     export VM_INSTANCE_NAME="<vm instance name whetever you like such as `swg-test-vm`>"
-    export PROJECT_ID="<project_id where the resources were created>"
     ```
 
     ```bash
     gcloud compute instances create ${VM_INSTANCE_NAME} \
     --subnet=${SUBNETWORK_NAME} \
     --zone=${ZONE} \
-    --project=${PROJECT_ID} \ 
     --image-project=debian-cloud \
     --image-family=debian-11
 
     ```
 
-1. SSH into the vm instance. You may access the vm instance by using `gcloud` CLI tool:
+2. SSH into the vm instance. You may access the vm instance by using `gcloud` CLI tool:
    
    ```bash
     gcloud compute ssh ${VM_INSTANCE_NAME} \
@@ -124,17 +122,18 @@ You may want to test all resource are successfully working as expected by perfor
     ```bash
     export NETWORK_NAME="<the chosen network where the resources were created such as `default`>"
     export DEST_RANGES="<the chosen `subnet_ip_cidr_range` usend in `terraform.tfvars.json` such as `10.128.0.0/20`"
+    export PROJECT_ID="<project_id where the resources were created>"
     ```
 
     ```bash
     gcloud compute firewall-rules create allow-ssh --network ${NETWORK_NAME} --direction ingress --action=ALLOW --rules=tcp:22 --rules all --destination-ranges ${DEST_RANGES} --project=${PROJECT_ID}
     ```
 
-1. Perform a https request through the secure web gateway to hit the allowed `session_matcher_rule` you defined in `terraform.tfvars.json`
+3. Perform a https request through the secure web gateway to hit the allowed `session_matcher_rule` you defined in `terraform.tfvars.json`
     
     ```bash
     export GATEWAY_ADDRESS="<the chosen `gateway_address` in `terraform.tfvars.json`>"
-    export TARGET="<the chosen address you defined in `session_matcher_rule` in `terraform.tfvars.json` such as `example.com`>"
+    export TARGET_HOST="<the chosen address you defined in `session_matcher_rule` in `terraform.tfvars.json` such as `example.com`>"
     ```
 
     ```bash
