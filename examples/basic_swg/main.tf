@@ -8,8 +8,6 @@ module "pre_requirements" {
   project_id                        = var.project_id
   location                          = var.location
   proxyonlysubnet_ip_cidr_range     = var.proxyonlysubnet_ip_cidr_range
-  // TODO(felipegc) make sure to pass only the necessary apis to enable
-  project_apis_to_enable            = []
   network                           = var.network
   gateway_pem_certificate_file_path = var.gateway_pem_certificate_file_path
   gateway_pem_private_key_file_path = var.gateway_pem_private_key_file_path

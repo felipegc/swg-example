@@ -9,13 +9,6 @@ variable "location" {
   default     = "us-central1"
 }
 
-variable "project_apis_to_enable" {
-  description = "The necessary apis related to swg resources that will be enabled in the project."
-  type        = list(string)
-  // TODO(felipegc) check the necessary ones.
-  default     = []
-}
-
 variable "network" {
   description = "The network where the regional managed proxy subnetwork will be created."
   type        = string
