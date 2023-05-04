@@ -29,7 +29,7 @@ module basic_policy_and_rule {
   session_matcher_rule = var.session_matcher_rule
 }
 
-resource "google_network_services_gateway" "subnetwork" {
+resource "google_network_services_gateway" "default" {
   provider                             = google-beta
 
   project                              = var.project_id
