@@ -110,14 +110,14 @@ You may want to test if all resources are successfully working as expected by pe
     ```bash
     gcloud compute instances create ${VM_INSTANCE_NAME} \
     --project=${PROJECT_ID} \
-    --subnet=${SUBNETWORK_NAME} \
+    --machine-type=e2-micro \
+    --network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=${SUBNETWORK_NAME} \
     --zone=${ZONE} \
-    --image-project=debian-cloud \
-    --image-family=debian-11
+    --create-disk=auto-delete=yes,boot=yes,device-name=${VM_INSTANCE_NAME},image=projects/ubuntu-os-cloud/global/images/ubuntu-2304-lunar-amd64-v20230502,mode=rw,size=10,type=projects/${PROJECT_ID}/zones/${ZONE}/diskTypes/pd-balanced
 
     ```
 
-2. SSH into the vm instance. You may access the vm instance by using `gcloud` CLI tool:
+1. SSH into the vm instance. You may access the vm instance by using `gcloud` CLI tool:
    
    ```bash
     gcloud compute ssh ${VM_INSTANCE_NAME} \
@@ -135,7 +135,7 @@ You may want to test if all resources are successfully working as expected by pe
     gcloud compute firewall-rules create allow-ssh --network ${NETWORK_NAME} --direction ingress --action=ALLOW --rules=tcp:22 --rules all --destination-ranges ${DEST_RANGES} --project=${PROJECT_ID}
     ```
 
-3. Perform a https request through the secure web gateway to hit the allowed `session_matcher_rule` you defined in `terraform.tfvars.json`
+1. Perform a https request through the secure web gateway to hit the allowed `session_matcher_rule` you defined in `terraform.tfvars.json`
     
     ```bash
     export GATEWAY_ADDRESS="<the chosen `gateway_address` in `terraform.tfvars.json`>"
@@ -146,8 +146,12 @@ You may want to test if all resources are successfully working as expected by pe
     curl -x https://${GATEWAY_ADDRESS}:443 https://${TARGET_HOST}
     ```
 
-    __Note:__ If you are using a self signed certificate, the `curl` cmd may complains about it. To solve that you should choose `http` vs `https` for proxy tunnel.
+    __Note:__ If you are using a self signed certificate, the `curl` cmd may complains about it. To solve that you should choose `http` vs `https` for proxy tunnel or add the flag `--proxy-insecure`.
 
     ```bash
     curl -x http://${GATEWAY_ADDRESS}:443 https://${TARGET_HOST}
+    ```
+
+    ```bash
+    curl -x https://${GATEWAY_ADDRESS}:443 https://${TARGET_HOST} --proxy-insecure
     ```
