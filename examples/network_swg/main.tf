@@ -1,4 +1,4 @@
-resource "random_id" "pre_req_id_suffix" {
+resource "random_id" "netswg_id_suffix" {
   byte_length = 3
 }
 
@@ -34,9 +34,9 @@ resource "google_network_services_gateway" "subnetwork" {
 
   project                              = var.project_id
   location                             = var.location
-  name                                 = "tf-basic-swg-${random_id.pre_req_id_suffix.hex}"
+  name                                 = "tf-basic-swg-${random_id.netswg_id_suffix.hex}"
   type                                 = "SECURE_WEB_GATEWAY"
-  scope                                = "scope-basic-swg-${random_id.pre_req_id_suffix.hex}"
+  scope                                = "scope-basic-swg-${random_id.netswg_id_suffix.hex}"
   certificate_urls                     = [module.pre_requirements.certificate_id]
   network                              = module.basic_network.network_id
   subnetwork                           = module.basic_network.subnetwork_id
