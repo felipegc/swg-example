@@ -5,5 +5,5 @@ output "certificate_id" {
 
 output "proxyonlysubnet" {
   description = "Regional manged proxy subnetwork created for the network."
-  value       = google_certificate_manager_certificate.certificate.id
+  value       = google_compute_subnetwork.proxyonlysubnet.id
 }
